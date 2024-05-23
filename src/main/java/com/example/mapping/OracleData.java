@@ -10,8 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class OracleData{
+public class OracleData {
 
     private final Connection conexion;
 
@@ -68,7 +67,7 @@ public class OracleData{
             String nombreCampo = campo.getName();
             String tipoDato = obtenerTipoDato(campo.getType());
             query.append(nombreCampo).append(" ").append(tipoDato);
-            // Verificar si es clave primaria (para que tenga llave primaria debe llamarse nombredelaclase_id, todo en minuscula)
+            // Verificar si es clave primaria (para que tenga llave primaria debe llamarse nombredelaclase_id, todo en minúscula)
             if (nombreCampo.equals(nombreTabla + "_id")) {
                 query.append(" PRIMARY KEY");
                 tieneClavePrimaria = true;
@@ -177,9 +176,7 @@ public class OracleData{
                     } else if (campo.getType() == long.class || campo.getType() == Long.class) {
                         valorCampo = ((Number) valorCampo).longValue();
                     } else if (campo.getType() == boolean.class || campo.getType() == Boolean.class) {
-                        //valorCampo = (valorCampo instanceof Number) ? ((Number) valorCampo).intValue() != 0 : Boolean.parseBoolean(valorCampo.toString());
-                        valorCampo = (valorCampo instanceof Number) ? ((Number) valorCampo).intValue() != 0 : (boolean) valorCampo;
-
+                        valorCampo = (valorCampo instanceof Number) ? ((Number) valorCampo).intValue() != 0 : Boolean.valueOf(valorCampo.toString());
                     }
 
                     campo.set(instancia, valorCampo);
@@ -191,6 +188,40 @@ public class OracleData{
             throw new SQLException("No se pudo encontrar el constructor predeterminado para la clase " + clase.getSimpleName() + ": " + e.getMessage(), e);
         } catch (InstantiationException | IllegalAccessException | java.lang.reflect.InvocationTargetException e) {
             throw new SQLException("Error al instanciar la clase " + clase.getSimpleName() + ": " + e.getMessage(), e);
+        }
+    }
+
+    public void actualizarDatos(String nombreTabla, Object objeto, String clavePrimaria, Object valorClavePrimaria) throws SQLException, IllegalAccessException {
+        StringBuilder query = new StringBuilder("UPDATE ").append(nombreTabla).append(" SET ");
+
+        Field[] campos = objeto.getClass().getDeclaredFields();
+        for (Field campo : campos) {
+            campo.setAccessible(true);
+            String nombreCampo = campo.getName();
+            Object valorCampo = campo.get(objeto);
+
+            if (!nombreCampo.equals(clavePrimaria)) { // Evitar actualizar la clave primaria
+                query.append(nombreCampo).append(" = '").append(valorCampo).append("', ");
+            }
+        }
+
+        // Eliminar la coma y el espacio extra al final de la lista de campos
+        query.delete(query.length() - 2, query.length());
+        query.append(" WHERE ").append(clavePrimaria).append(" = '").append(valorClavePrimaria).append("'");
+
+        try (PreparedStatement statement = conexion.prepareStatement(query.toString())) {
+            statement.executeUpdate();
+            System.out.println("Datos actualizados en la tabla " + nombreTabla + " correctamente.");
+        }
+    }
+
+    public void eliminarDatos(String nombreTabla, String clavePrimaria, Object valorClavePrimaria) throws SQLException {
+        String query = "DELETE FROM " + nombreTabla + " WHERE " + clavePrimaria + " = ?";
+
+        try (PreparedStatement statement = conexion.prepareStatement(query)) {
+            statement.setObject(1, valorClavePrimaria);
+            statement.executeUpdate();
+            System.out.println("Datos eliminados de la tabla " + nombreTabla + " correctamente.");
         }
     }
 }
