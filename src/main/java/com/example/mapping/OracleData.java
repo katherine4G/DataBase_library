@@ -21,7 +21,7 @@ public class OracleData {
     public void mapearClaseATabla(Object objeto) {
         try {
             Class<?> clase = objeto.getClass();
-            String nombreTabla = clase.getSimpleName().toLowerCase(); // Suponemos que el nombre de la tabla es igual al nombre de la clase en minúsculas
+            String nombreTabla = clase.getSimpleName().toLowerCase(); // el nombre de la tabla debe ser igual a la clase 
             try {
                 // Crear tabla si no existe
                 crearTablaSiNoExiste(nombreTabla, clase);

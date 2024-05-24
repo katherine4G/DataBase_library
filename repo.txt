@@ -1,0 +1,6 @@
+repositorio:
+https://github.com/katherine4G/DataBase_library.git
+
+contraseña users oracle: 
+ADMINISTRADOR =1234
+Conexion_oracle= 12345 (new_user_developer)
