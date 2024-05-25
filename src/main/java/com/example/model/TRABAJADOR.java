@@ -2,7 +2,7 @@ package com.example.model;
 
 public class TRABAJADOR{
     
-    private int ID;
+    private int trabajador_id;
     private String nombre;
     private String apellido;
     private String cedula;
@@ -11,7 +11,7 @@ public class TRABAJADOR{
 
     public TRABAJADOR(){}
     public TRABAJADOR(int ID,String name,String lastName, String worker_id,String email,String job_position){
-        this.ID = ID;
+        this.trabajador_id = ID;
         this.correo = email;
         this.cargo = job_position;
         this.apellido = lastName;
@@ -20,10 +20,10 @@ public class TRABAJADOR{
     }
     
     public int getID() {
-        return ID;
+        return trabajador_id;
     }
     public void setID(int iD) {
-        ID = iD;
+        trabajador_id = iD;
     }    
 
     public String getName() {

@@ -104,8 +104,43 @@ public class OracleData {
             return "VARCHAR(255)"; // Por defecto, se considera como String
         }
     }
-
+    private boolean objetoExiste(String nombreTabla, String campoId, Object valorId) throws SQLException {
+        String query = "SELECT COUNT(*) FROM " + nombreTabla + " WHERE " + campoId + " = ?";
+        try (PreparedStatement statement = conexion.prepareStatement(query)) {
+            statement.setObject(1, valorId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int count = resultSet.getInt(1);
+                    return count > 0;
+                }
+            }
+        }
+        return false;
+    }
     private void insertarDatos(String nombreTabla, Class<?> clase, Object objeto) throws SQLException, IllegalAccessException {
+        Field campoId = null;
+        Object valorId = null;
+        
+        // Buscar el campo id
+        for (Field campo : clase.getDeclaredFields()) {
+            campo.setAccessible(true);
+            if (campo.getName().equals(nombreTabla + "_id")) {
+                campoId = campo;
+                valorId = campo.get(objeto);
+                break;
+            }
+        }
+        
+        if (campoId == null || valorId == null) {
+            throw new SQLException("No se encontró un campo de clave primaria en el objeto.");
+        }
+
+        // Verificar si el objeto ya existe
+        if (objetoExiste(nombreTabla, campoId.getName(), valorId)) {
+            System.out.println("El objeto con id " + valorId + " ya existe.");
+            return;
+        }
+
         StringBuilder query = new StringBuilder("INSERT INTO ").append(nombreTabla).append(" (");
         StringBuilder values = new StringBuilder("VALUES (");
 
@@ -118,7 +153,6 @@ public class OracleData {
             query.append(nombreCampo).append(", ");
             values.append("'").append(valorCampo).append("', ");
         }
-
         // Eliminar la coma y el espacio extra al final de las listas de campos y valores
         query.delete(query.length() - 2, query.length());
         values.delete(values.length() - 2, values.length());
@@ -222,6 +256,20 @@ public class OracleData {
             statement.setObject(1, valorClavePrimaria);
             statement.executeUpdate();
             System.out.println("Datos eliminados de la tabla " + nombreTabla + " correctamente.");
+        }
+    }
+
+     // Método para eliminar una tabla
+     public void eliminarTabla(String nombreTabla) throws SQLException {
+        String query = "DROP TABLE " + nombreTabla;
+
+        try (PreparedStatement statement = conexion.prepareStatement(query)) {
+            statement.executeUpdate();
+            conexion.commit();  // Confirmar la transacción
+            System.out.println("Tabla " + nombreTabla + " eliminada correctamente.");
+        } catch (SQLException e) {
+            conexion.rollback();  // Revertir la transacción en caso de error
+            System.err.println("Error al eliminar la tabla " + nombreTabla + ": " + e.getMessage());
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.example.model;
 
 public class CAR {
-    private int id;
+    private int car_id;
     private String marca;
     private String modelo;
     private int anio;
@@ -9,18 +9,18 @@ public class CAR {
     public CAR() {}
 
     public CAR(int id, String marca, String modelo, int año) {
-        this.id = id;
+        this.car_id = id;
         this.marca = marca;
         this.modelo = modelo;
         this.anio = año;
     }
 
     public int getId() {
-        return id;
+        return car_id;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.car_id = id;
     }
 
     public String getMarca() {
