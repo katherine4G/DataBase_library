@@ -1,0 +1,7 @@
+com\example\mapping\MongoCRUD.class
+com\example\mapping\OracleData.class
+com\example\model\CAR.class
+com\example\connection\OracleConnection.class
+com\example\Main.class
+com\example\connection\MongoDBConnection.class
+com\example\model\TRABAJADOR.class
