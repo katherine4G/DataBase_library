@@ -48,8 +48,8 @@ oracleData.eliminarTabla("car");  //Delete the CAR table, if it exists.
 ```
 
 #### Create collections and Insert data into MongoDB
-	//Create Worker objects (for example)
-       Worker worker1 = new Worker(1,"Maria","Perez","1234254","mari@gmail.com","developer");
+```java	
+       Worker worker1 = new Worker(1,"Maria","Perez","1234254","mari@gmail.com","developer"); //Create Worker objects (for example)
 	   
        mongoData.insert(worker1); //Insert objects into collection
 	   
@@ -57,7 +57,7 @@ oracleData.eliminarTabla("car");  //Delete the CAR table, if it exists.
        mongoData.modify(workerRecovered);
        
        mongoData.delete(TRABAJADOR.class, 1);// Delete a worker
-
+```
 ### Contributions
 
 Contributions are welcome! If you have any ideas to improve this library. feel free to send your recommendations.
