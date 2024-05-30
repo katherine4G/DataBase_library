@@ -28,11 +28,13 @@ public class OracleConnection {
 #### MongoDB
 [![mongoDB](https://upload.wikimedia.org/wikipedia/commons/9/93/MongoDB_Logo.svg "mongoDB")](https://upload.wikimedia.org/wikipedia/commons/9/93/MongoDB_Logo.svg "mongoDB")
 
+```java
 	public class MongoDBConnection {
 	//Parameters
 	  private static final String CONNECTION_STRING="mongodb://localhost:27017";
     private static final String DATABASE_NAME = "example"; //// Reemplaza con tu nombre  de la base de datos.
 	}
+ ```
 
 ### Use
 Below are some examples of how to use the functions provided by the library:
