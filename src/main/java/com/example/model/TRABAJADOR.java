@@ -57,4 +57,8 @@ public class TRABAJADOR{
     public void setJob_position(String job_position) {
         this.cargo = job_position;
     }
+    @Override
+    public String toString() {
+        return "TRABAJADOR {id=" + trabajador_id + ", nombre='" + nombre + " "+apellido + " "+cedula+ " "+correo+ " "+cargo +"'}";
+    }
 }

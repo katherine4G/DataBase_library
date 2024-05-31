@@ -89,6 +89,28 @@ public class OracleData {
         }
     }
 
+    //  buscar un objeto por el valor de un campo específico
+    public <T> T findByFieldAndPrint(Class<T> clase, String campo, Object valor) {
+        String nombreTabla = clase.getSimpleName().toLowerCase(); // Derivar el nombre de la tabla del nombre de la clase
+        try {
+            String query = "SELECT * FROM " + nombreTabla + " WHERE " + campo + " = ?";
+            try (PreparedStatement statement = conexion.prepareStatement(query)) {
+                statement.setObject(1, valor);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        T instancia = construirInstancia(clase, resultSet);
+                        System.out.println("Objeto encontrado:");
+                        System.out.println(instancia.toString()); // Suponiendo que tengas un método toString en tus clases
+                        return instancia;
+                    } 
+                    else {  System.out.println("No se encontró ningún objeto " + campo + " = " + valor + ".");}
+                }
+            }
+        } catch (SQLException e) {System.err.println("Error al buscar el objeto en la tabla: " + e.getMessage()); }
+
+        return null;
+    }
+
     private String obtenerTipoDato(Class<?> tipo) {
         if (tipo == String.class) {
             return "VARCHAR(255)";

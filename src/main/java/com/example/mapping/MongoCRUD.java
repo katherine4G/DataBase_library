@@ -1,15 +1,17 @@
 package com.example.mapping;
 
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import org.bson.Document;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bson.Document;
+
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 public class MongoCRUD {
     private static MongoDatabase conexion = null;
@@ -68,6 +70,48 @@ public class MongoCRUD {
         }
         return doc;
     }
+
+    // buscar un objeto por el valor de un campo específico
+    public <T> T findByFieldAndPrint(Class<T> clase, String fieldName, Object value) {
+        String nombreColeccion = clase.getSimpleName().toLowerCase();
+        MongoCollection<Document> coleccion = conexion.getCollection(nombreColeccion);
+        Document query = new Document(fieldName, value);
+
+        try {
+            Document doc = coleccion.find(query).first();
+            if (doc != null) {
+                T instancia = buildInstance(clase, doc);
+               // System.out.println("Documento encontrado:");
+                System.out.println(doc.toJson());
+                return instancia;
+            }
+         else {
+            System.out.println("No se encontró ningún objeto");
+        }
+            
+        } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+            System.err.println("Error al buscar el objeto en MongoDB: " + e.getMessage());
+        }
+        return null;
+    }
+    // public <T> TRABAJADOR findByFieldAndPrint(Class<T> clase, String fieldName, Object value) {
+    //     String nombreColeccion = clase.getSimpleName().toLowerCase();
+    //     MongoCollection<Document> coleccion = conexion.getCollection(nombreColeccion);
+    //     Document query = new Document(fieldName, value);
+
+    //     try {
+    //         Document doc = coleccion.find(query).first();
+    //         if (doc != null) {
+    //             System.out.println("Documento encontrado:");
+    //             System.out.println(doc.toJson());
+    //         } else {
+    //             System.out.println("No se encontró ningún documento con " + fieldName + " igual a " + value);
+    //         }
+    //     } catch (Exception e) {
+    //         System.err.println("Error al buscar el objeto en MongoDB: " + e.getMessage());
+    //     }
+    //     return null;
+    // }
 
     // Seleccionar todo
     public <T> List<T> selectAll(Class<T> clase) {
