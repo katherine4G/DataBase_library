@@ -19,8 +19,8 @@ Before starting to use the library, make sure you correctly configure the access
 ```java
 public class OracleConnection {
     // Parameters for Oracle XE connection
-    private static final String USER_ORACLE = "example";// Reemplaza con tu nombre de usuario.
-    private static final String PASSWORD = "example";  // Reemplaza con tu contraseña.
+    private static final String USER_ORACLE = "example";
+    private static final String PASSWORD = "example";  
     private static final String URL = "jdbc:oracle:thin:@localhost:1521:XE";
 }
 ```
@@ -32,9 +32,19 @@ public class OracleConnection {
 	public class MongoDBConnection {
 	//Parameters
 	  private static final String CONNECTION_STRING="mongodb://localhost:27017";
-    private static final String DATABASE_NAME = "example"; //// Reemplaza con tu nombre  de la base de datos.
+    private static final String DATABASE_NAME = "example"; //
 	}
  ```
+#### My SQL
+[![mySql](https://upload.wikimedia.org/wikipedia/labs/8/8e/Mysql_logo.png "mySql")](https://upload.wikimedia.org/wikipedia/labs/8/8e/Mysql_logo.png "mySql")
+
+
+     
+	  // Parámetros conexión a MySQL
+     private static final String URL_MYSQL = "jdbc:mysql://localhost:3306/mysql_conn";
+     private static final String USER_MYSQL = "your user";
+     private static final String PASSWORD = "your password";
+
 
 ### Use
 Below are some examples of how to use the functions provided by the library:
@@ -59,6 +69,22 @@ oracleData.eliminarTabla("car");  //Delete the CAR table, if it exists.
        mongoData.modify(workerRecovered);
        
        mongoData.delete(TRABAJADOR.class, 1);// Delete a worker
+```
+
+```java
+        TRABAJADOR worker1 = new TRABAJADOR(id,"name","lastName","id_person","email","admin");
+        // Insert
+        mapeo.insertar(worker0);
+        mapeo.insertar(worker1);
+        // Delete 
+        mapeo.eliminar(TRABAJADOR.class, 1);
+		// Select all people from the table and print 
+        mapeo.seleccionarTodo(TRABAJADOR.class).forEach(System.out::println);
+		//find by field
+        mapeo.findByFieldAndPrint(TRABAJADOR.class, "name", "name_example");
+
+		
+
 ```
 ### Contributions
 
