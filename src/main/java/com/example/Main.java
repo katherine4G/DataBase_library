@@ -1,58 +1,69 @@
 package com.example;
 
-////////////////// ORACLE//////////////////////////////////////////
+// ////////////////// ORACLE//////////////////////////////////////////
 
-//import com.example.connection.OracleConnection;
-//import com.example.mapping.OracleData;
-//import com.example.model.CAR;
-//import com.example.model.TRABAJADOR;
+// import java.sql.Connection;
+// import java.sql.SQLException;
+// import java.util.List;
+
+// import com.example.connection.OracleConnection;
+// import com.example.mapping.OracleData;
+// import com.example.model.CAR;
+// import com.example.model.TRABAJADOR;
 // public class Main {
 //     public static void main(String[] args) throws IllegalAccessException, SQLException {
-//         // Establecer la conexión
-//         Connection conexion = OracleConnection.conectarOracleXE();      
-//         OracleData oracleData = new OracleData(conexion); 
-//         conexion.setAutoCommit(false);
-
-//         //  CAR car = new CAR(1,"Toyota","corolla",2000);
-//         // // Mapear la clase a la tabla
-//         // oracleData.mapearClaseATabla(car);
-//         // // Eliminar la tabla CAR si existe
-//          //oracleData.eliminarTabla("trabajador");
-
-//         // //objetos de la clase TRABAJADOR
-//         // TRABAJADOR worker0 = new TRABAJADOR(0,"Joan","CS","181273","JC@gmail.com","developer"); 
-//         // TRABAJADOR worker1 = new TRABAJADOR(1,"kathy","G","12345","k@gmail.com","manager"); 
-
-//         // oracleData.mapearClaseATabla(worker0); // Mapear la clase a la tabla e insertar trabajadores
-//         // oracleData.mapearClaseATabla(worker1); 
-
-//         // // Actualizar datos de un trabajador
-//         // worker0.setName("Johan");
-//         // oracleData.actualizarDatos("TRABAJADOR", worker0, "trabajador_id", worker0.getID());
-//         // worker1.setLastName("Guatemala");
-//         // oracleData.actualizarDatos("TRABAJADOR", worker1, "trabajador_id", worker1.getID());
-        
-//         // // Eliminar datos de un trabajador
-//         // oracleData.eliminarDatos("TRABAJADOR", "trabajador_id", worker0.getID());
-//         // oracleData.eliminarDatos("TRABAJADOR", "trabajador_id", worker1.getID());
-
-//         // // to string
-//         // List<TRABAJADOR> trabajadores = oracleData.recuperarDeTabla(TRABAJADOR.class);
-//         // for (TRABAJADOR trabajador : trabajadores) {
-//         //     System.out.println(trabajador.getID() + " " + trabajador.getName() + " " + trabajador.getLastName() +
-//         //             " " + trabajador.getWorker_id() + " " + trabajador.getEmail() + " " + trabajador.getJob_position());
-//         // }
-        
-//          // Buscar un trabajador por nombre
-//          CAR LookForCar = oracleData.findByFieldAndPrint(CAR.class, "marca", "Toyota");
-   
-//         conexion.close();
+//         try (Connection conexion = OracleConnection.conectarOracleXE()) {
+//             OracleData oracleData = new OracleData(conexion);
+//             conexion.setAutoCommit(false);
+            
+//             CAR car = new CAR(1,"Toyota","corolla",2000);
+//             // Mapear la clase a la tabla
+//             oracleData.mapearClaseATabla(car);
+//             // Eliminar la tabla CAR si existe
+//             oracleData.eliminarTabla("trabajador");
+            
+//             //objetos de la clase TRABAJADOR
+//             TRABAJADOR worker0 = new TRABAJADOR(0,"Joan","CS","181273","JC@gmail.com","developer");
+//             TRABAJADOR worker1 = new TRABAJADOR(1,"kathy","G","12345","k@gmail.com","manager");
+            
+//             oracleData.mapearClaseATabla(worker0); // Mapear la clase a la tabla e insertar trabajadores
+//             oracleData.mapearClaseATabla(worker1);
+            
+//             // Actualizar datos de un trabajador
+//             worker0.setName("Johan");
+//             oracleData.actualizarDatos("TRABAJADOR", worker0, "trabajador_id", worker0.getID());
+//             worker1.setLastName("Guatemala");
+//             oracleData.actualizarDatos("TRABAJADOR", worker1, "trabajador_id", worker1.getID());
+            
+//             // Eliminar datos de un trabajador
+//             oracleData.eliminarDatos("TRABAJADOR", "trabajador_id", worker0.getID());
+//             oracleData.eliminarDatos("TRABAJADOR", "trabajador_id", worker1.getID());
+            
+//             // to string
+//             List<TRABAJADOR> trabajadores = oracleData.recuperarDeTabla(TRABAJADOR.class);
+//             for (TRABAJADOR trabajador : trabajadores) {
+//                 System.out.println(trabajador.getID() + " " + trabajador.getName() + " " + trabajador.getLastName() +
+//                         " " + trabajador.getWorker_id() + " " + trabajador.getEmail() + " " + trabajador.getJob_position());
+//             }
+            
+//             // Buscar un carro por nombre
+//             oracleData.findByFieldAndPrint(CAR.class, "marca", "Toyota");
+//         }
 
 //     }
 // }
 
 
 // ///////////////////////////////Mongo/////////////////////
+
+// import java.sql.SQLException;
+// import java.util.List;
+
+// import com.example.connection.MongoDBConnection;
+// import com.example.mapping.MongoCRUD;
+// import com.example.model.TRABAJADOR;
+// import com.mongodb.client.MongoDatabase;
+
 // public class Main {
 //     public static void main(String[] args) throws SQLException {
        
@@ -73,18 +84,18 @@ package com.example;
 //            System.out.println(trabajador.getID()+"-"+trabajador.getName() + " " + trabajador.getLastName()+ "." +trabajador.getWorker_id()+". " + trabajador.getEmail() + ". " + trabajador.getJob_position() );
 //        }
     
-//     //    TRABAJADOR workerRecovered = MongoCRUD.selectById(TRABAJADOR.class,1);// Seleccionar un trabajador por ID
+//        TRABAJADOR workerRecovered = MongoCRUD.selectById(TRABAJADOR.class,1);// Seleccionar un trabajador por ID
 
-//     //    // Modificar al trabajador seleccionado
-//     //    workerRecovered.setJob_position("Secretaria");
-//     //    mongoData.modify(workerRecovered);
-//     //    System.out.println("Trabajador modificado: " + workerRecovered.getName()+" = "+ workerRecovered.getJob_position());
+//        // Modificar al trabajador seleccionado
+//        workerRecovered.setJob_position("Secretaria");
+//        mongoData.modify(workerRecovered);
+//        System.out.println("Trabajador modificado: " + workerRecovered.getName()+" = "+ workerRecovered.getJob_position());
 
-//     //     TRABAJADOR workerRecovered = mongoData.findByFieldAndPrint(TRABAJADOR.class, "nombre", "Ma");
-        
-//     //    mongoData.delete(TRABAJADOR.class, 1);// Eliminar un trabajador
-//     //    mongoData.delete(TRABAJADOR.class, 2);
-
+//        //mongoData.delete(TRABAJADOR.class, 1);// Eliminar un trabajador
+//        //mongoData.delete(TRABAJADOR.class, 2);
+       
+    
+//        mongoData.findByFieldAndPrint(TRABAJADOR.class, "nombre", "Ma");
     
 
 //        MongoDBConnection.close();
@@ -93,7 +104,10 @@ package com.example;
 // }
 
 
-/////////////////////////////MySql/////////////////////////////////////
+// /////////////////////////////MySql/////////////////////////////////////
+
+// import java.sql.Connection;
+// import java.sql.SQLException;
 
 // import com.example.connection.MySqlConnection;
 // import com.example.mapping.MySlqCRUD;

@@ -7,8 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class OracleData {
 
@@ -89,56 +87,6 @@ public class OracleData {
         }
     }
 
-    //  buscar un objeto por el valor de un campo específico
-    public <T> T findByFieldAndPrint(Class<T> clase, String campo, Object valor) {
-        String nombreTabla = clase.getSimpleName().toLowerCase(); // Derivar el nombre de la tabla del nombre de la clase
-        try {
-            String query = "SELECT * FROM " + nombreTabla + " WHERE " + campo + " = ?";
-            try (PreparedStatement statement = conexion.prepareStatement(query)) {
-                statement.setObject(1, valor);
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
-                        T instancia = construirInstancia(clase, resultSet);
-                        System.out.println("Objeto encontrado:");
-                        System.out.println(instancia.toString()); // Suponiendo que tengas un método toString en tus clases
-                        return instancia;
-                    } 
-                    else {  System.out.println("No se encontró ningún objeto " + campo + " = " + valor + ".");}
-                }
-            }
-        } catch (SQLException e) {System.err.println("Error al buscar el objeto en la tabla: " + e.getMessage()); }
-
-        return null;
-    }
-
-    private String obtenerTipoDato(Class<?> tipo) {
-        if (tipo == String.class) {
-            return "VARCHAR(255)";
-        } else if (tipo == int.class || tipo == Integer.class) {
-            return "INT";
-        } else if (tipo == double.class || tipo == Double.class) {
-            return "DOUBLE";
-        } else if (tipo == float.class || tipo == Float.class) {
-            return "FLOAT";
-        } else if (tipo == boolean.class || tipo == Boolean.class) {
-            return "BOOLEAN";
-        } else {
-            return "VARCHAR(255)"; // Por defecto, se considera como String
-        }
-    }
-    private boolean objetoExiste(String nombreTabla, String campoId, Object valorId) throws SQLException {
-        String query = "SELECT COUNT(*) FROM " + nombreTabla + " WHERE " + campoId + " = ?";
-        try (PreparedStatement statement = conexion.prepareStatement(query)) {
-            statement.setObject(1, valorId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    int count = resultSet.getInt(1);
-                    return count > 0;
-                }
-            }
-        }
-        return false;
-    }
     private void insertarDatos(String nombreTabla, Class<?> clase, Object objeto) throws SQLException, IllegalAccessException {
         Field campoId = null;
         Object valorId = null;
@@ -190,25 +138,29 @@ public class OracleData {
         }
     }
 
-    public <T> List<T> recuperarDeTabla(Class<T> clase) {
-        List<T> resultados = new ArrayList<>();
+
+    //  buscar un objeto por el valor de un campo específico
+    public <T> T findByFieldAndPrint(Class<T> clase, String campo, Object valor) {
         String nombreTabla = clase.getSimpleName().toLowerCase(); // Derivar el nombre de la tabla del nombre de la clase
         try {
-            String query = "SELECT * FROM " + nombreTabla;
+            String query = "SELECT * FROM " + nombreTabla + " WHERE " + campo + " = ?";
             try (PreparedStatement statement = conexion.prepareStatement(query)) {
+                statement.setObject(1, valor);
                 try (ResultSet resultSet = statement.executeQuery()) {
-                    while (resultSet.next()) {
+                    if (resultSet.next()) {
                         T instancia = construirInstancia(clase, resultSet);
-                        resultados.add(instancia);
-                    }
+                        System.out.println("Objeto encontrado:");
+                        System.out.println(instancia.toString()); // Suponiendo que tengas un método toString en tus clases
+                        return instancia;
+                    } 
+                    else {  System.out.println("No se encontró ningún objeto " + campo + " = " + valor + ".");}
                 }
             }
-        } catch (SQLException e) {
-            System.err.println("Error al recuperar objetos de la tabla: " + e.getMessage());
-        }
-        return resultados;
-    }
+        } catch (SQLException e) {System.err.println("Error al buscar el objeto en la tabla: " + e.getMessage()); }
 
+        return null;
+    }
+    
     private <T> T construirInstancia(Class<T> clase, ResultSet resultSet) throws SQLException {
         try {
             Constructor<T> constructor = clase.getDeclaredConstructor();
@@ -246,6 +198,36 @@ public class OracleData {
             throw new SQLException("Error al instanciar la clase " + clase.getSimpleName() + ": " + e.getMessage(), e);
         }
     }
+    
+    private String obtenerTipoDato(Class<?> tipo) {
+        if (tipo == String.class) {
+            return "VARCHAR(255)";
+        } else if (tipo == int.class || tipo == Integer.class) {
+            return "INT";
+        } else if (tipo == double.class || tipo == Double.class) {
+            return "DOUBLE";
+        } else if (tipo == float.class || tipo == Float.class) {
+            return "FLOAT";
+        } else if (tipo == boolean.class || tipo == Boolean.class) {
+            return "BOOLEAN";
+        } else {
+            return "VARCHAR(255)"; // Por defecto, se considera como String
+        }
+    }
+  
+    private boolean objetoExiste(String nombreTabla, String campoId, Object valorId) throws SQLException {
+        String query = "SELECT COUNT(*) FROM " + nombreTabla + " WHERE " + campoId + " = ?";
+        try (PreparedStatement statement = conexion.prepareStatement(query)) {
+            statement.setObject(1, valorId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int count = resultSet.getInt(1);
+                    return count > 0;
+                }
+            }
+        }
+        return false;
+    }
 
     public void actualizarDatos(String nombreTabla, Object objeto, String clavePrimaria, Object valorClavePrimaria) throws SQLException, IllegalAccessException {
         StringBuilder query = new StringBuilder("UPDATE ").append(nombreTabla).append(" SET ");
@@ -270,7 +252,7 @@ public class OracleData {
             System.out.println("Datos actualizados en la tabla " + nombreTabla + " correctamente.");
         }
     }
-
+    //Eliminar un objeto de la tabla
     public void eliminarDatos(String nombreTabla, String clavePrimaria, Object valorClavePrimaria) throws SQLException {
         String query = "DELETE FROM " + nombreTabla + " WHERE " + clavePrimaria + " = ?";
 
@@ -281,7 +263,7 @@ public class OracleData {
         }
     }
 
-     // Método para eliminar una tabla
+     //Eliminar una tabla
      public void eliminarTabla(String nombreTabla) throws SQLException {
         String query = "DROP TABLE " + nombreTabla;
 

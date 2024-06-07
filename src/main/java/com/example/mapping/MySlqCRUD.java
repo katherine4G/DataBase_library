@@ -29,24 +29,39 @@ public class MySlqCRUD {
 
             // Insertar datos en la tabla
             insertarDatos(nombreTabla, clase, objeto);
-            System.out.println("Datos insertados en la tabla " + nombreTabla + " correctamente."); // Agregado mensaje de éxito
+            System.out.println("Datos insertados en la tabla " + nombreTabla + " correctamente.");
         } catch (SQLException | IllegalAccessException e) {
             System.err.println("Error al mapear la clase a la tabla: " + e.getMessage());
         }
     }
+    
+    private void insertarDatos(String nombreTabla, Class<?> clase, Object objeto) throws SQLException, IllegalAccessException {
+        StringBuilder query = new StringBuilder("INSERT INTO ").append(nombreTabla).append(" (");
+        StringBuilder values = new StringBuilder("VALUES (");
 
-    private boolean tablaExiste(String nombreTabla) throws SQLException {
-        String query = "SELECT count(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?";
-        try (PreparedStatement statement = conexion.prepareStatement(query)) {
-            statement.setString(1, nombreTabla.toLowerCase());
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    int count = resultSet.getInt(1);
-                    return count > 0;
-                }
-            }
+        Field[] campos = clase.getDeclaredFields();
+        for (Field campo : campos) {
+            campo.setAccessible(true);
+            String nombreCampo = campo.getName();
+            Object valorCampo = campo.get(objeto);
+
+            query.append(nombreCampo).append(", ");
+            values.append("'").append(valorCampo).append("', ");
         }
-        return false;
+
+        // Eliminar la coma y el espacio extra al final de las listas de campos y valores
+        query.delete(query.length() - 2, query.length());
+        values.delete(values.length() - 2, values.length());
+
+        query.append(") ");
+        values.append(")");
+
+        String insertQuery = query.toString() + values.toString();
+
+        try (PreparedStatement statement = conexion.prepareStatement(insertQuery)) {
+            statement.executeUpdate();
+            System.out.println("Datos insertados en la tabla " + nombreTabla + " correctamente."); 
+        }
     }
 
     private void crearTablaSiNoExiste(String nombreTabla, Class<?> clase) throws SQLException {
@@ -87,6 +102,21 @@ public class MySlqCRUD {
             System.out.println("Tabla " + nombreTabla + " creada correctamente.");
         }
     }
+    
+    private boolean tablaExiste(String nombreTabla) throws SQLException {
+        String query = "SELECT count(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?";
+        try (PreparedStatement statement = conexion.prepareStatement(query)) {
+            statement.setString(1, nombreTabla.toLowerCase());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int count = resultSet.getInt(1);
+                    return count > 0;
+                }
+            }
+        }
+        return false;
+    }
+
 
     private String obtenerTipoDato(Class<?> tipo) {
         if (tipo == String.class) {
@@ -101,110 +131,6 @@ public class MySlqCRUD {
             return "BOOLEAN";
         } else {
             return "VARCHAR(255)"; // Por defecto, se considera como String
-        }
-    }
-
-    public void insertarSiNoExiste(Object objeto) {
-        try {
-            // Verificar si el objeto ya existe en la base de datos
-            if (existeObjeto(objeto)) {
-                System.out.println("El objeto ya ha sido creado previamente.");
-                return; // Salir del método si el objeto ya existe
-            }
-            
-            // Insertar el objeto si no existe
-            insertar(objeto);
-        } catch (SQLException | IllegalAccessException e) {
-            System.err.println("Error al insertar el objeto: " + e.getMessage());
-        }
-    }
-    private boolean existeObjeto(Object objeto) throws SQLException, IllegalAccessException {
-        Class<?> clase = objeto.getClass();
-        String nombreTabla = clase.getSimpleName().toLowerCase(); // Suponemos que el nombre de la tabla es igual al nombre de la clase en minúsculas
-        
-        // Construir la consulta SQL para verificar si el objeto ya existe en la base de datos
-        StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM ")
-                                    .append(nombreTabla)
-                                    .append(" WHERE ");
-
-        Field[] campos = clase.getDeclaredFields();
-        for (Field campo : campos) {
-            campo.setAccessible(true);
-            String nombreCampo = campo.getName();
-            Object valorCampo = campo.get(objeto);
-
-            // Agregar cada campo y su valor a la consulta
-            query.append(nombreCampo).append(" = '").append(valorCampo).append("' AND ");
-        }
-
-        // Eliminar el "AND" adicional al final de la consulta
-        query.delete(query.length() - 5, query.length());
-
-        // Ejecutar la consulta SQL
-        try (PreparedStatement statement = conexion.prepareStatement(query.toString())) {
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    int count = resultSet.getInt(1);
-                    return count > 0; // Retorna true si existe al menos un registro, false de lo contrario
-                }
-            }
-        }
-
-        return false; // Si no se encontraron registros
-    }
-    private void insertarDatos(String nombreTabla, Class<?> clase, Object objeto) throws SQLException, IllegalAccessException {
-        StringBuilder query = new StringBuilder("INSERT INTO ").append(nombreTabla).append(" (");
-        StringBuilder values = new StringBuilder("VALUES (");
-
-        Field[] campos = clase.getDeclaredFields();
-        for (Field campo : campos) {
-            campo.setAccessible(true);
-            String nombreCampo = campo.getName();
-            Object valorCampo = campo.get(objeto);
-
-            query.append(nombreCampo).append(", ");
-            values.append("'").append(valorCampo).append("', ");
-        }
-
-        // Eliminar la coma y el espacio extra al final de las listas de campos y valores
-        query.delete(query.length() - 2, query.length());
-        values.delete(values.length() - 2, values.length());
-
-        query.append(") ");
-        values.append(")");
-
-        String insertQuery = query.toString() + values.toString();
-
-        try (PreparedStatement statement = conexion.prepareStatement(insertQuery)) {
-            statement.executeUpdate();
-            System.out.println("Datos insertados en la tabla " + nombreTabla + " correctamente."); 
-        }
-    }
-
-    
-    public <T> void findByFieldAndPrint(Class<T> clase, String nombreCampo, Object valorCampo) {
-        String nombreTabla = clase.getSimpleName().toLowerCase();
-
-        String query = "SELECT * FROM " + nombreTabla + " WHERE " + nombreCampo + " = ?";
-        try (PreparedStatement statement = conexion.prepareStatement(query)) {
-            statement.setObject(1, valorCampo);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                boolean encontrado = false;
-                while (resultSet.next()) {
-                    encontrado = true;
-                    System.out.println("Registro encontrado en la tabla " + nombreTabla + ":");
-                    for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-                        String columnName = resultSet.getMetaData().getColumnName(i);
-                        Object columnValue = resultSet.getObject(i);
-                        System.out.println(columnName + ": " + columnValue);
-                    }
-                }
-                if (!encontrado) {
-                    System.out.println("No se encontró ningún registro en la tabla " + nombreTabla + " con " + nombreCampo + " = " + valorCampo + ".");
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error al buscar y mostrar los registros en la tabla " + nombreTabla + ": " + e.getMessage());
         }
     }
 
@@ -248,7 +174,7 @@ public class MySlqCRUD {
             return null;
         }
     }
-
+    
     private <T> T construirInstancia(Class<T> clase, ResultSet resultSet) throws SQLException {
         try {
             Constructor<T> constructor = clase.getDeclaredConstructor();
@@ -283,6 +209,31 @@ public class MySlqCRUD {
             throw new SQLException("No se pudo encontrar el constructor predeterminado para la clase " + clase.getSimpleName() + ": " + e.getMessage(), e);
         } catch (InstantiationException | IllegalAccessException | java.lang.reflect.InvocationTargetException e) {
             throw new SQLException("Error al instanciar la clase " + clase.getSimpleName() + ": " + e.getMessage(), e);
+        }
+    }
+
+   //BUSCAR POR CAMPO
+    public <T> void findByFieldAndPrint(Class<T> clase, String nombreCampo, Object valorCampo) {
+        String nombreTabla = clase.getSimpleName().toLowerCase();
+
+        String query = "SELECT * FROM " + nombreTabla + " WHERE " + nombreCampo + " = ?";
+        try (PreparedStatement statement = conexion.prepareStatement(query)) {
+            statement.setObject(1, valorCampo);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                boolean encontrado = false;
+                while (resultSet.next()) {
+                    encontrado = true;
+                    System.out.println("Registro encontrado en la tabla " + nombreTabla + ":");
+                    for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+                        String columnName = resultSet.getMetaData().getColumnName(i);
+                        Object columnValue = resultSet.getObject(i);
+                        System.out.println(columnName + ": " + columnValue);
+                    }
+                }
+                if (!encontrado) {System.out.println("No se encontró ningún registro en la tabla " + nombreTabla + " con " + nombreCampo + " = " + valorCampo + ".");}
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar y mostrar los registros en la tabla " + nombreTabla + ": " + e.getMessage());
         }
     }
 

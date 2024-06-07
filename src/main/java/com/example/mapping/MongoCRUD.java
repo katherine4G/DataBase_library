@@ -94,26 +94,8 @@ public class MongoCRUD {
         }
         return null;
     }
-    // public <T> TRABAJADOR findByFieldAndPrint(Class<T> clase, String fieldName, Object value) {
-    //     String nombreColeccion = clase.getSimpleName().toLowerCase();
-    //     MongoCollection<Document> coleccion = conexion.getCollection(nombreColeccion);
-    //     Document query = new Document(fieldName, value);
 
-    //     try {
-    //         Document doc = coleccion.find(query).first();
-    //         if (doc != null) {
-    //             System.out.println("Documento encontrado:");
-    //             System.out.println(doc.toJson());
-    //         } else {
-    //             System.out.println("No se encontró ningún documento con " + fieldName + " igual a " + value);
-    //         }
-    //     } catch (Exception e) {
-    //         System.err.println("Error al buscar el objeto en MongoDB: " + e.getMessage());
-    //     }
-    //     return null;
-    // }
-
-    // Seleccionar todo
+    // Seleccionar todos
     public <T> List<T> selectAll(Class<T> clase) {
         List<T> resultados = new ArrayList<>();
         String nombreColeccion = clase.getSimpleName().toLowerCase();
@@ -131,7 +113,7 @@ public class MongoCRUD {
         }
         return resultados;
     }
-    // Seleccionar uno
+    // Seleccionar un objeto
     public static <T> T selectById(Class<T> clase, Object id) {
         String nombreColeccion = clase.getSimpleName().toLowerCase();
         MongoCollection<Document> coleccion = conexion.getCollection(nombreColeccion);
