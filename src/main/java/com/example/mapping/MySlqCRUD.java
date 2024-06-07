@@ -227,6 +227,7 @@ public class MySlqCRUD {
                     for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
                         String columnName = resultSet.getMetaData().getColumnName(i);
                         Object columnValue = resultSet.getObject(i);
+                        
                         System.out.println(columnName + ": " + columnValue);
                     }
                 }

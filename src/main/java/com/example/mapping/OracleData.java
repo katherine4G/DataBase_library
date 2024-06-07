@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OracleData {
 
@@ -150,7 +152,7 @@ public class OracleData {
                     if (resultSet.next()) {
                         T instancia = construirInstancia(clase, resultSet);
                         System.out.println("Objeto encontrado:");
-                        System.out.println(instancia.toString()); // Suponiendo que tengas un método toString en tus clases
+                        System.out.println(instancia.toString()); 
                         return instancia;
                     } 
                     else {  System.out.println("No se encontró ningún objeto " + campo + " = " + valor + ".");}
@@ -229,6 +231,25 @@ public class OracleData {
         return false;
     }
 
+    public <T> List<T> recuperarDeTabla(Class<T> clase) {
+        List<T> resultados = new ArrayList<>();
+        String nombreTabla = clase.getSimpleName().toLowerCase(); // Derivar el nombre de la tabla del nombre de la clase
+        try {
+            String query = "SELECT * FROM " + nombreTabla;
+            try (PreparedStatement statement = conexion.prepareStatement(query)) {
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        T instancia = construirInstancia(clase, resultSet);
+                        resultados.add(instancia);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al recuperar objetos de la tabla: " + e.getMessage());
+        }
+        return resultados;
+    }
+    
     public void actualizarDatos(String nombreTabla, Object objeto, String clavePrimaria, Object valorClavePrimaria) throws SQLException, IllegalAccessException {
         StringBuilder query = new StringBuilder("UPDATE ").append(nombreTabla).append(" SET ");
 
