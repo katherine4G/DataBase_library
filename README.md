@@ -53,9 +53,9 @@ public class OracleConnection {
 Below are some examples of how to use the functions provided by the library:
 
 
-###  Oracle SQL developer
+####  Oracle SQL developer
 
-- #### Create Table and insert objects 
+- ##### Create Table and insert objects 
 
 ```java
  CAR car = new CAR(1,"Toyota","corolla",2000); //Example of class for table.
@@ -63,18 +63,18 @@ Below are some examples of how to use the functions provided by the library:
 oracleData.mapearClaseATabla(car); // Map the class to the table.
 
 ```
-- #### Delete a table
+- ##### Delete a table
 
 ```java
 oracleData.eliminarTabla("car");  //Delete the CAR table, if it exists.
 ```
-- #### Delete table objects
+- ##### Delete table objects
 
 ```java
 oracleData.eliminarDatos("TRABAJADOR", "car_id", worker0.getID());
 ```
 
-- #### Update or edit Table data
+- ##### Update or edit Table data
 
 ```java
  // Search for a car by name
@@ -84,9 +84,9 @@ oracleData.eliminarDatos("TRABAJADOR", "car_id", worker0.getID());
 
 ------------
 
-### MongoDB
+#### MongoDB
 
-- #### Create collections and objects  
+- ##### Create collections and objects  
 
 ```java	
        Worker worker1 = new Worker(1,"Maria","Perez","1234254","mari@gmail.com","secretary"); //Create Worker class objects (for example)
@@ -95,7 +95,7 @@ oracleData.eliminarDatos("TRABAJADOR", "car_id", worker0.getID());
 
 ```
 
-- #### Update or edit Table data
+- ##### Update or edit Table data
 
 ```java
 	TRABAJADOR workerRecovered = MongoCRUD.selectById(TRABAJADOR.class, worker1.getID()); // Select a worker by ID
@@ -104,19 +104,17 @@ oracleData.eliminarDatos("TRABAJADOR", "car_id", worker0.getID());
        mongoData.modify(workerRecovered);
 ```
 
-- #### Delete objects in MongoDB Table 
+- ##### Delete objects in MongoDB Table 
 
    ```java
-mongoData.delete(TRABAJADOR.class, 1);// Delete a worker
-```
-
+	mongoData.delete(TRABAJADOR.class, 1);// Delete a worker ```
 
 ------------
 
+####  MySQL
 
-### MySQL
+- ##### Create Table and insert objects 
 
-- #### Create table  and objects 
 
 ```java
         TRABAJADOR worker1 = new TRABAJADOR(id,"name","lastName","id_person","email","admin");
@@ -125,20 +123,18 @@ mongoData.delete(TRABAJADOR.class, 1);// Delete a worker
         mapeo.insertar(worker1);
 ```
 
-- #### Find data 
+- ##### Find data 
 
 ```java
 // Select all people from the table and print 
-        mapeo.seleccionarTodo(TRABAJADOR.class).forEach(System.out::println);
-		//find by field
-        mapeo.findByFieldAndPrint(TRABAJADOR.class, "name", "name_example");
+mapeo.seleccionarTodo(TRABAJADOR.class).forEach(System.out::println); //find by field
+        mapeo.findByFieldAndPrint(TRABAJADOR.class, "name", "name_workerExample");
 
 ```
 
-- #### Delete objects on table
+- ##### Delete objects on table
 ```java
- // Delete 
-        mapeo.eliminar(TRABAJADOR.class, worker0.getPrimaryKey());  //delete by id number
+mapeo.eliminar(TRABAJADOR.class, worker0.getPrimaryKey());  //delete by id number
 ```
 
 
@@ -149,4 +145,4 @@ mongoData.delete(TRABAJADOR.class, 1);// Delete a worker
 Contributions are welcome! If you have any ideas to improve this library. feel free to send your recommendations.
 
 ### License
-This project is licensed under an  License.
+This project is under license.
