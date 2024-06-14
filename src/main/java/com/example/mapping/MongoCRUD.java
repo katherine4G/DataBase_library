@@ -164,6 +164,12 @@ public class MongoCRUD {
             System.err.println("Error al eliminar el objeto de MongoDB: " + e.getMessage());
         }
     }
+    // Eliminar una colección completa
+    public void eliminarColeccion(String nombreColeccion) {
+        MongoCollection<Document> coleccion = conexion.getCollection(nombreColeccion);
+        coleccion.drop();
+        System.out.println("Colección " + nombreColeccion + " eliminada correctamente.");
+    }
     // Modificar
     public void modify(Object objeto) {
         try {

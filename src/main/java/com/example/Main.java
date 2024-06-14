@@ -1,62 +1,64 @@
 package com.example;
 
-// ////////////////// ORACLE//////////////////////////////////////////
+// // ////////////////// ORACLE//////////////////////////////////////////
 
 // import java.sql.Connection;
 // import java.sql.SQLException;
-// import java.util.List;
 
 // import com.example.connection.OracleConnection;
 // import com.example.mapping.OracleData;
-// import com.example.model.TRABAJADOR;
 // public class Main {
 //     public static void main(String[] args) throws IllegalAccessException, SQLException {
 //         try (Connection conexion = OracleConnection.conectarOracleXE()) {
 //             OracleData oracleData = new OracleData(conexion);
 //             conexion.setAutoCommit(false);
-            
-//             // CAR car = new CAR(1,"Toyota","corolla",2000);
-//             // // Mapear la clase a la tabla
-//             // oracleData.mapearClaseATabla(car);
-//             // // Eliminar la tabla CAR si existe
-//             // oracleData.eliminarTabla("trabajador");
-            
-//             //objetos de la clase TRABAJADOR
-//             TRABAJADOR worker0 = new TRABAJADOR(0,"Joan","CS","181273","JC@gmail.com","developer");
-//             TRABAJADOR worker1 = new TRABAJADOR(1,"kathy","G","12345","k@gmail.com","manager");
-            
-//             oracleData.mapearClaseATabla(worker0); // Mapear la clase a la tabla e insertar trabajadores
-//             oracleData.mapearClaseATabla(worker1);
-            
-//             // Actualizar datos de un trabajador
-//             worker0.setName("Johan");
-//             oracleData.actualizarDatos("TRABAJADOR", worker0, "trabajador_id", worker0.getID());
-//             worker1.setLastName("Guatemala");
-//             oracleData.actualizarDatos("TRABAJADOR", worker1, "trabajador_id", worker1.getID());
-            
-//             // // Eliminar datos de un trabajador
-//             // oracleData.eliminarDatos("TRABAJADOR", "trabajador_id", worker0.getID());
-//             // oracleData.eliminarDatos("TRABAJADOR", "trabajador_id", worker1.getID());
-            
-//             // to string
-//             List<TRABAJADOR> trabajadores = oracleData.recuperarDeTabla(TRABAJADOR.class);
-//             for (TRABAJADOR trabajador : trabajadores) {
-//                 System.out.println(trabajador.getID() + " " + trabajador.getName() + " " + trabajador.getLastName() +
-//                         " " + trabajador.getWorker_id() + " " + trabajador.getEmail() + " " + trabajador.getJob_position());
-//             }
-            
-//             // // Buscar un carro por nombre
-//             // oracleData.findByFieldAndPrint(CAR.class, "marca", "Toyota");
+
+//             // // Objetos de la clase CAR
+//             // CAR car0  = new CAR(0,"Toyota","corolla",2000);
+//             // CAR car1 = new CAR(1, "Honda", "Civic", 2010);
+//             // CAR car2 = new CAR(2, "Ford", "Focus", 2012);
+
+//             // oracleData.mapearClaseATabla(car0);// Mapear la clase a la tabla e insertar carros
+//             // oracleData.mapearClaseATabla(car1); 
+//             // oracleData.mapearClaseATabla(car2);
+
+//             // // Actualizar datos         
+//             // car0.setMarca("Hyundai");
+//             // oracleData.actualizarDatos("CAR", car0, "car_id", car0.getId());
+//             // car1.setModelo("Fiesta");
+//             // oracleData.actualizarDatos("CAR", car1, "car_id", car1.getId());
+
+          
+//             // //Eliminar datos
+//             //  oracleData.eliminarDatos("CAR", "car_id", car0.getId());
+//             //  oracleData.eliminarDatos("CAR", "car_id", car1.getId());
+//             // oracleData.eliminarDatos("CAR", "car_id", car2.getId());
+
+//             // //Eliminar la tabla 
+//            //  oracleData.eliminarTabla("car");
+
+//           //  // Buscar un carro (ej: por id)
+//         //    oracleData.findByFieldAndPrint(CAR.class, "car_id", "0");
+//         //    oracleData.findByFieldAndPrint(CAR.class, "modelo", "algo");
+     
+//             //  Buscar un carro por nombre
+//             //  oracleData.findByFieldAndPrint(CAR.class, "marca", "Toyota");
+
+//             // Recuperar y mostrar todos los carros en la base de datos
+//             // List<CAR> cars = oracleData.recuperarDeTabla(CAR.class);
+//             // for (CAR retrievedCar : cars) {
+//             //     System.out.println(retrievedCar.getId() + " " + retrievedCar.getMarca() + " " + 
+//             //     retrievedCar.getModelo() + " " + retrievedCar.getAño());
+//             // }
 //         }
 
 //     }
-//}
+// }
 
 
-///////////////////////////////Mongo/////////////////////
+// ///////////////////////////////Mongo/////////////////////
 
 // import java.sql.SQLException;
-// import java.util.List;
 
 // import com.example.connection.MongoDBConnection;
 // import com.example.mapping.MongoCRUD;
@@ -69,32 +71,36 @@ package com.example;
 //        MongoDatabase database = MongoDBConnection.conectarMongoDB();// Conectar a la base de datos  
 //        MongoCRUD mongoData = new MongoCRUD(database);// Crear una instancia de MongoData
 
-//        // Crear objetos Trabajador
-//        TRABAJADOR trabajador1 = new TRABAJADOR(1,"Maria","Perez","1234254","mari@gmail.com","limpieza");
-//        TRABAJADOR trabajador2 = new TRABAJADOR(2,"José","Ureña","438942","jose@gmail.com","limpieza");
+//       // Crear objetos Trabajador
+//       TRABAJADOR trabajador1 = new TRABAJADOR(1,"Maria","Perez","1234254","mari@gmail.com","limpieza");
+//       TRABAJADOR trabajador2 = new TRABAJADOR(2,"José","Ureña","438942","jose@gmail.com","limpieza");
 
-//        // Insertar objetos Trabajador en la colección
-//        mongoData.insert(trabajador1);
-//        mongoData.insert(trabajador2);
+//      // Insertar objetos Trabajador en la colección
+//     //   mongoData.insert(trabajador1);
+//     //   mongoData.insert(trabajador2);
 
-//        // Seleccionar todos los trabajadores (to string)
-//        List<TRABAJADOR> trabajadores = mongoData.selectAll(TRABAJADOR.class);
-//        for (TRABAJADOR trabajador : trabajadores) {
-//            System.out.println(trabajador.getID()+"-"+trabajador.getName() + " " + trabajador.getLastName()+ "." +trabajador.getWorker_id()+". " + trabajador.getEmail() + ". " + trabajador.getJob_position() );
-//        }
+//     //    // Seleccionar todos los trabajadores (to string)
+//     //    List<TRABAJADOR> trabajadores = mongoData.selectAll(TRABAJADOR.class);
+//     //    for (TRABAJADOR trabajador : trabajadores) {
+//     //        System.out.println(trabajador.getID()+"-"+trabajador.getName() + " " + 
+//     //        trabajador.getLastName()+ "." +trabajador.getWorker_id()+". " + 
+//     //        trabajador.getEmail() + ". " + trabajador.getJob_position() );
+//     //    }
 
 //     // // Modificar al trabajador seleccionado
 //     //    TRABAJADOR workerRecovered = MongoCRUD.selectById(TRABAJADOR.class,1);// Seleccionar un trabajador por ID
 
-//     //    workerRecovered.setJob_position("Secretaria");
+//     //    workerRecovered.setJob_position("Developer");
 //     //    mongoData.modify(workerRecovered);
 //     //    System.out.println("Trabajador modificado: " + workerRecovered.getName()+" = "+ workerRecovered.getJob_position());
 
-//        //mongoData.delete(TRABAJADOR.class, 1);// Eliminar un trabajador
-//        //mongoData.delete(TRABAJADOR.class, 2);
+//     //mongoData.delete(TRABAJADOR.class, 1);// Eliminar un trabajador
+//    //// mongoData.eliminarColeccion("trabajador"); 
        
     
-//        mongoData.findByFieldAndPrint(TRABAJADOR.class, "nombre", "Ma");
+//     //    mongoData.findByFieldAndPrint(TRABAJADOR.class, "nombre", "José");
+
+//     //    mongoData.findByFieldAndPrint(TRABAJADOR.class, "nombre", "Maria");
     
 
 //        MongoDBConnection.close();
@@ -103,7 +109,7 @@ package com.example;
 // }
 
 
-// /////////////////////////////MySql/////////////////////////////////////
+//  ///////////////////////////MySql/////////////////////////////////////
 
 // import java.sql.Connection;
 // import java.sql.SQLException;
@@ -116,26 +122,35 @@ package com.example;
 //     public static void main(String[] args) throws SQLException {
 //         Connection conexion = MySqlConnection.conectarMySQL();
 //         MySlqCRUD mapeo = new MySlqCRUD(conexion);
+        
 //         // Crear un objeto Persona
-//         TRABAJADOR worker0 = new TRABAJADOR(0,"jaime","Corrales","387429","jaime@gmail.com","security");
-//         TRABAJADOR worker1 = new TRABAJADOR(1,"katherine","Barrientos","387429","kat@gmail.com","admin");
+//         TRABAJADOR worker0 = new TRABAJADOR(0,"jaime","Castro","387429","jaime@hotmail.com","security");
+//         TRABAJADOR worker1 = new TRABAJADOR(1,"katherine","Barrientos","8012309","kat@gmail.com","admin");
 
-//         // Insertar el objeto Persona en la base de datos
-//         mapeo.insertar(worker0);
-//         mapeo.insertar(worker1);
+//         // // Insertar el objeto Persona en la base de datos
+//         // mapeo.insertar(worker0);
+//         // mapeo.insertar(worker1);
 
+//         //  // Actualizar datos de un trabajador          
+//             //  worker0.setEmail("jaimeCR@gmail.com");
+//             //  mapeo.modificar(worker0);
+   
 
 //         // // Eliminar el objeto de la base de datos
-//         // mapeo.eliminar(TRABAJADOR.class, 0);
-//         // mapeo.eliminar(TRABAJADOR.class, 1);
+//         //  mapeo.eliminar(TRABAJADOR.class, 0);
+//         //  mapeo.eliminar(TRABAJADOR.class, 1);
 
+//         // // Eliminar la Tabla de la base de datos
+//          mapeo.eliminarTabla("trabajador");
 
 //         // Seleccionar todas las personas de la tabla y mostrarlas
-//         System.out.println("Personas en la base de datos:");
-//         mapeo.seleccionarTodo(TRABAJADOR.class).forEach(System.out::println);
+//         // System.out.println("Personas en la base de datos:");
+//         // mapeo.seleccionarTodo(TRABAJADOR.class).forEach(System.out::println);
 
-//         //Encontrar un registro
-//         mapeo.findByFieldAndPrint(TRABAJADOR.class, "nombre", "katherine");
+//         // //Encontrar un registro
+//         // mapeo.findByFieldAndPrint(TRABAJADOR.class, "nombre", "katherine");
+//         // mapeo.findByFieldAndPrint(TRABAJADOR.class, "nombre", "jose");
+
 
 //         }
     

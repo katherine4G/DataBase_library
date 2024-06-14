@@ -6,9 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 public class MySlqCRUD {
 
     private final Connection conexion;
@@ -254,6 +254,15 @@ public class MySlqCRUD {
             }
         } catch (SQLException e) {
             System.err.println("Error al eliminar el registro con ID " + id + ": " + e.getMessage());
+        }
+    }
+    public void eliminarTabla(String nombreTabla) {
+        String query = "DROP TABLE IF EXISTS " + nombreTabla;
+        try (Statement statement = conexion.createStatement()) {
+            statement.executeUpdate(query);
+            System.out.println("Tabla " + nombreTabla + " eliminada correctamente.");
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar la tabla " + nombreTabla + ": " + e.getMessage());
         }
     }
 
